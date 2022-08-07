@@ -74,9 +74,9 @@ const goods = [
 ]
 
 
-
+// Класс, реализующий ренедринг товара карточки товара
 class GoodsItem {
-    constructor(id, category, title, price, currency, img) {
+    constructor({ id, category = 'не определена', title = 'не добавлен', price = 0, currency, img = 'default.jpg' }) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -86,36 +86,55 @@ class GoodsItem {
     }
 
     render() {
-
-
+        return `
+        <div class="item">
+            <div class="img_block">
+                <img src="img/${this.img}" alt="${this.title}">   
+            </div>
+            <span class="category_name">${this.category}</span>
+            <a href="#" class="title_for_item" id=${this.id}>${this.title}</a>
+            <span class="price_item">${new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 0 }).format(this.price)} ${this.currency}</span>
+            <button class="btn btn_item" id=${this.id}>В корзину</button>
+        </div>`;
     }
-
 }
 
 
+// Класс, реализующий вывод списка товаров
+class GoodsList {
+    constructor() {
+        this.goods = [];
+    }
 
-// Рендеринг данных в html
-const renderGoodsItem = ({ id, category = 'не определена', title = 'не добавлен', price = 0, currency, img = 'default.jpg' }) => {
-    return `
-        <div class="item">
-            <div class="img_block">
-                <img src="img/${img}" alt="${title}">   
-            </div>
-            <span class="category_name">${category}</span>
-            <a href="#" class="title_for_item" id=${id}>${title}</a>
-            <span class="price_item">${new Intl.NumberFormat("ru-RU", {
-        minimumFractionDigits: 0
-    }).format(price)} ${currency}</span>
-            <button class="btn btn_item" id=${id}>В корзину</button>
-        </div>
-    `;
-};
+    fetchGoods() {
+        this.goods = goods;
+    }
 
-// Собираем данныe для вставки в DOM
-const renderGoodsList = (list) => {
-    let goodsList = list.map(item => renderGoodsItem(item));
-    // join позволяет избваиться от запятой
-    document.querySelector('.goods-list').innerHTML = goodsList.join('');
-};
+    // метод определяет общую стоимость товаров в каталоге
+    calculateСostGoods() {
+        let res_calculate = 0
+        // используем map + reduce, в процессе проверяем корректность значения 'price'
+        res_calculate = this.goods.map(item => item.price).reduce(function (a, b) {
+            let b_add = b ? parseFloat(b) : 0; return a + b_add
+        });
+        return res_calculate;
+    }
 
-renderGoodsList(goods);
+    render() {
+        let listHtml = '';
+        this.goods.forEach(good => {
+            const goodItem = new GoodsItem(good);
+            listHtml += goodItem.render()
+        });
+        document.querySelector('.goods-list').innerHTML = listHtml;
+    }
+}
+
+
+// Выводим данные на страницу
+const list = new GoodsList();
+list.fetchGoods();
+list.render();
+
+// Вывод результата решения по второй задаче
+alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
