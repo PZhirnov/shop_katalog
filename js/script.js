@@ -73,6 +73,28 @@ const goods = [
     },
 ]
 
+// console.log(JSON.stringify(goods));
+
+// Структура goods сделана в Mocky - https://run.mocky.io/v3/afd8d1e8-5507-4c20-a26e-7cc09030f768
+const BASE = 'https://run.mocky.io/v3';
+const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
+
+// Функция загружает JSON по url
+function service(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    const loadHandler = () => {
+        callback(JSON.parse(xhr.response));
+    }
+    xhr.onload = loadHandler;
+    xhr.send();
+}
+
+service(`${BASE}${GOODS}`, (data) => {
+    console.log(data);
+})
+
+
 
 // Класс, реализующий ренедринг товара карточки товара
 class GoodsItem {
@@ -106,8 +128,14 @@ class GoodsList {
         this.goods = [];
     }
 
-    fetchGoods() {
-        this.goods = goods;
+    fetchGoods(callback) {
+        // this.goods = goods;
+        service(`${BASE}${GOODS}`, (data) => {
+            this.goods = data;
+            // после получения данных отрендерим им через переданный render в callback
+            callback();
+        });
+
     }
 
     // метод определяет общую стоимость товаров в каталоге
@@ -132,8 +160,10 @@ class GoodsList {
 
 // Выводим данные на страницу
 const list = new GoodsList();
-list.fetchGoods();
-list.render();
+list.fetchGoods(() => {
+    list.render();
+});
+
 
 // Вывод результата решения по второй задаче
-alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
+// alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
