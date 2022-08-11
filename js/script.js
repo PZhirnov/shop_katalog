@@ -113,20 +113,19 @@ class GoodsList {
     // метод определяет общую стоимость товаров в каталоге
     calculateСostGoods() {
         let res_calculate = 0
-        // используем map + reduce, в процессе проверяем корректность значения 'price'
-        res_calculate = this.goods.map(item => item.price).reduce(function (a, b) {
-            let b_add = b ? parseFloat(b) : 0; return a + b_add
-        });
-        return res_calculate;
+        // Вариант решения с деструктуризацией
+        return this.goods.reduce((prev, { price }) => {
+            let price_valid = price ? parseFloat(price) : 0;
+            return prev + price_valid;
+        }, 0)
     }
 
     render() {
-        let listHtml = '';
-        this.goods.forEach(good => {
+        const items = this.goods.map(good => {
             const goodItem = new GoodsItem(good);
-            listHtml += goodItem.render()
-        });
-        document.querySelector('.goods-list').innerHTML = listHtml;
+            return goodItem.render();
+        }).join('')
+        document.querySelector('.goods-list').innerHTML = items;
     }
 }
 
