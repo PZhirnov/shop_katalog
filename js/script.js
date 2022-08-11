@@ -72,25 +72,40 @@ class GoodsItem {
 class GoodsList {
     constructor() {
         this.goods = [];
+
     }
 
-    fetchGoods(callback) {
-        // --- Пример ПЗ с урока. service с callback
-        // service(`${BASE}${GOODS}`, (data) => {
-        //     this.goods = data;
-        //     // после получения данных отрендерим им через переданный render в callback
-        //     callback();
-        // });
-
-        // --- К решению ДЗ №1 ---- 
-        let p = service(`${BASE}${GOODS}`)
-        p.then((data) => {
-            this.goods = data;
-            callback();
-        }, (error) => {
-            alert(error); // сообщение об ошибке, если нужно
-        })
+    // --- Решение по условию ДЗ №3 - 
+    fetchGoods() {
+        return new Promise((resolve) => {
+            const p = service(`${BASE}${GOODS}`);
+            p.then((data) => {
+                this.goods = data;
+                resolve();
+            }, (error) => { alert(error); })
+        });
     }
+
+    // --- Решение по условию ДЗ № 1 ------
+    // fetchGoods(callback) {
+    //     // --- Пример ПЗ с урока. service с callback
+    //     // service(`${BASE}${GOODS}`, (data) => {
+    //     //     this.goods = data;
+    //     //     // после получения данных отрендерим им через переданный render в callback
+    //     //     callback();
+    //     // });
+
+    //     // --- К решению ДЗ №1 ---- 
+    //     let p = service(`${BASE}${GOODS}`)
+    //     p.then((data) => {
+    //         this.goods = data;
+    //         callback();
+    //     }, (error) => {
+    //         alert(error); // сообщение об ошибке, если нужно
+    //     })
+    // }
+
+
 
     // метод определяет общую стоимость товаров в каталоге
     calculateСostGoods() {
@@ -113,11 +128,19 @@ class GoodsList {
 
 
 // Выводим данные на страницу
-const list = new GoodsList();
+const goodsList = new GoodsList();
 
-list.fetchGoods(() => {
-    list.render();
-});
+// --- К решению ДЗ №1
+// goodsList.fetchGoods(() => {
+//     goodsList.render();
+// });
+
+
+// --- К решению ДЗ №3
+goodsList.fetchGoods().then(() => {
+    goodsList.render();
+})
+
 
 //console.log('текст для проверки ассинхронности')
 
