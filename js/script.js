@@ -1,98 +1,40 @@
 "use strict";
 
-
-// Данные по товарам
-const goods = [
-    {
-        id: 1,
-        category: 'Видеокарты',
-        title: 'MSI AMD Radeon RX 550 AERO ITX OC [RX 550 AERO ITX 4G OC]',
-        price: 8500,
-        currency: 'руб.',
-        img: 'radeonrx550.webp',
-    },
-    {
-        id: 2,
-        category: 'Видеокарты',
-        title: 'KFA2 GeForce GTX 1050 Ti 1-Click OC [50IQH8DSQ31K]',
-        price: 14000,
-        currency: 'руб.',
-        img: 'KFA2_1050.webp',
-    },
-    {
-        id: 3,
-        category: 'Видеокарты',
-        title: 'PowerColor AMD Radeon RX 6500 XT ITX [AXRX 6500XT 4GBD6-DH]',
-        price: 16000,
-        currency: 'руб.',
-        img: 'RADEONRX6500XT.webp',
-    },
-    {
-        id: 4,
-        category: 'Видеокарты',
-        title: 'MSI GeForce GTX 1660 SUPER Gaming [GTX 1660 SUPER GAMING]',
-        price: 37800,
-        currency: 'руб.',
-        img: 'MSI_GeForce1660.webp',
-    },
-    {
-        id: 5,
-        category: 'Твердотельные накопители',
-        title: '240 ГБ 2.5" SATA накопитель HP S650 [345M8AA#ABB]',
-        price: 2799,
-        currency: 'руб.',
-        img: 'hps650.webp',
-    },
-    {
-        id: 6,
-        category: 'Твердотельные накопители',
-        title: '500 ГБ 2.5" SATA накопитель Samsung 870 EVO [MZ-77E500B/EU]',
-        price: 10000,
-        currency: 'руб.',
-        img: 'samsung_evo870.webp',
-    },
-    {
-        id: 7,
-        category: 'SSD M.2 накопители',
-        title: '2000 ГБ SSD M.2 накопитель WD Black SN850 [WDS200T1X0E]',
-        price: 40000,
-        currency: 'руб.',
-        img: 'wd850sn.webp',
-    },
-    // Тестовые карточки товаров
-    {
-        id: 8,
-        category: 'Тестовая',
-        title: 'Позиция без изображения',
-        currency: 'руб.',
-    },
-    {
-        id: 9,
-        category: 'Тестовая',
-        currency: 'руб.',
-    },
-]
-
-// console.log(JSON.stringify(goods));
-
 // Структура goods сделана в Mocky - https://run.mocky.io/v3/afd8d1e8-5507-4c20-a26e-7cc09030f768
 const BASE = 'https://run.mocky.io/v3';
 const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
 
-// Функция загружает JSON по url
-function service(url, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    const loadHandler = () => {
-        callback(JSON.parse(xhr.response));
-    }
-    xhr.onload = loadHandler;
-    xhr.send();
-}
+// ---- ПЗ с урока. Функция загружает JSON по url c callback функцией
+// function service(url, callback) {
+//     const xhr = new XMLHttpRequest();
+//     xhr.open('GET', url);
+//     const loadHandler = () => {
+//         callback(JSON.parse(xhr.response));
+//     }
+//     xhr.onload = loadHandler;
+//     xhr.send();
+// }
 
-service(`${BASE}${GOODS}`, (data) => {
-    console.log(data);
-})
+// service(`${BASE}${GOODS}`, (data) => {
+//     console.log(data);
+// })
+
+
+// ---- РЕШЕНИЕ ДЗ №1. Переделать service так, чтобы функция использовала промисы
+
+function service(url) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        const loadHandler = () => {
+            // расскомментировать для проверки ассинхронности
+            // setTimeout(() => resolve(JSON.parse(xhr.response)), 5000);
+            resolve(JSON.parse(xhr.response));
+        }
+        xhr.onload = loadHandler;
+        xhr.send();
+    })
+}
 
 
 
@@ -129,13 +71,19 @@ class GoodsList {
     }
 
     fetchGoods(callback) {
-        // this.goods = goods;
-        service(`${BASE}${GOODS}`, (data) => {
-            this.goods = data;
-            // после получения данных отрендерим им через переданный render в callback
-            callback();
-        });
+        // --- Пример ПЗ с урока. service с callback
+        // service(`${BASE}${GOODS}`, (data) => {
+        //     this.goods = data;
+        //     // после получения данных отрендерим им через переданный render в callback
+        //     callback();
+        // });
 
+        // --- ДЗ №1
+        let p = service(`${BASE}${GOODS}`)
+        p.then((data) => {
+            this.goods = data;
+            callback();
+        })
     }
 
     // метод определяет общую стоимость товаров в каталоге
@@ -160,10 +108,11 @@ class GoodsList {
 
 // Выводим данные на страницу
 const list = new GoodsList();
+
 list.fetchGoods(() => {
     list.render();
 });
+console.log('текст')
 
-
-// Вывод результата решения по второй задаче
+// Вывод суммы по всем товарам каталога
 // alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
