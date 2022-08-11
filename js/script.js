@@ -27,15 +27,19 @@ function service(url) {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         const loadHandler = () => {
+            console.log(xhr.status);
             // расскомментировать для проверки ассинхронности
             // setTimeout(() => resolve(JSON.parse(xhr.response)), 5000);
             resolve(JSON.parse(xhr.response));
         }
         xhr.onload = loadHandler;
+        // добавил обработчик ошибки
+        xhr.onerror = function () {
+            reject(new Error('Ошибка получения данных! Обновите страницу.'));
+        };
         xhr.send();
     })
 }
-
 
 
 // Класс, реализующий ренедринг товара карточки товара
@@ -78,11 +82,13 @@ class GoodsList {
         //     callback();
         // });
 
-        // --- ДЗ №1
+        // --- К решению ДЗ №1 ---- 
         let p = service(`${BASE}${GOODS}`)
         p.then((data) => {
             this.goods = data;
             callback();
+        }, (error) => {
+            alert(error); // сообщение об ошибке, если нужно
         })
     }
 
@@ -112,7 +118,8 @@ const list = new GoodsList();
 list.fetchGoods(() => {
     list.render();
 });
-console.log('текст')
+
+//console.log('текст для проверки ассинхронности')
 
 // Вывод суммы по всем товарам каталога
 // alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
