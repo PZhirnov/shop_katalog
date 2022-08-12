@@ -1,8 +1,34 @@
 "use strict";
 
+
+
+// ----------------------------------------------------------
+//   ЭТО АРХИВНЫЙ ВАРИНТ СКРИПТА С КОММЕНТАРИЯМИ И РЕШЕНИЯМИ 
+// ----------------------------------------------------------
+
+
+
+
+
+
 // Структура goods сделана в Mocky - https://run.mocky.io/v3/afd8d1e8-5507-4c20-a26e-7cc09030f768
 const BASE = 'https://run.mocky.io/v3';
 const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
+
+// ---- ПЗ с урока. Функция загружает JSON по url c callback функцией
+// function service(url, callback) {
+//     const xhr = new XMLHttpRequest();
+//     xhr.open('GET', url);
+//     const loadHandler = () => {
+//         callback(JSON.parse(xhr.response));
+//     }
+//     xhr.onload = loadHandler;
+//     xhr.send();
+// }
+
+// service(`${BASE}${GOODS}`, (data) => {
+//     console.log(data);
+// })
 
 
 // ---- РЕШЕНИЕ ДЗ №1. Переделать service так, чтобы функция использовала промисы
@@ -73,6 +99,13 @@ class GoodsList {
 
     // --- Решение по условию ДЗ № 1 ------
     // fetchGoods(callback) {
+    //     // --- Пример ПЗ с урока. service с callback
+    //     // service(`${BASE}${GOODS}`, (data) => {
+    //     //     this.goods = data;
+    //     //     // после получения данных отрендерим им через переданный render в callback
+    //     //     callback();
+    //     // });
+
     //     // --- К решению ДЗ №1 ---- 
     //     let p = service(`${BASE}${GOODS}`)
     //     p.then((data) => {
