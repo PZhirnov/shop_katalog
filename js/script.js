@@ -83,6 +83,10 @@ class GoodsList {
     //     })
     // }
 
+    filterGoods(value) {
+        // Фильтруем список товаров по данным из поля
+        alert(value);
+    }
 
 
     // метод определяет общую стоимость товаров в каталоге
@@ -124,3 +128,12 @@ goodsList.fetchGoods().then(() => {
 
 // Вывод суммы по всем товарам каталога
 // alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
+
+// --- ДЗ №4
+const searchButton = document.querySelector('.search-button');
+const searchField = document.querySelector('.goods-search');
+searchButton.addEventListener('click', () => {
+    if (searchField.value != null) {
+        goodsList.filterGoods(searchField.value);
+    }
+});
