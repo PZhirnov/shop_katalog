@@ -48,6 +48,7 @@ body {
 .navbar a.right {
     float: right;
 }
+
 /* .navbar button.right {
     margin-top: 10px;
     margin-right: 30px;
@@ -78,7 +79,7 @@ body {
     background-color: rgb(253, 253, 179);
 }
 
-.btn:active{
+.btn:active {
     background-color: rgb(219, 238, 137);
 }
 
@@ -90,17 +91,20 @@ body {
 }
 
 /* Column container */
-.row {  
-    display: -ms-flexbox; /* IE10 */
+.row {
+    display: -ms-flexbox;
+    /* IE10 */
     display: flex;
-    -ms-flex-wrap: wrap; /* IE10 */
+    -ms-flex-wrap: wrap;
+    /* IE10 */
     flex-wrap: wrap;
 }
 
 /* Create two unequal columns that sits next to each other */
 /* Sidebar/left column */
 .side {
-    -ms-flex: 10%; /* IE10 */
+    -ms-flex: 10%;
+    /* IE10 */
     flex: 10%;
     background-color: #4d4d4d;
     padding: 20px;
@@ -108,8 +112,9 @@ body {
 }
 
 /* Main column */
-.main {   
-    -ms-flex: 70%; /* IE10 */
+.main {
+    -ms-flex: 70%;
+    /* IE10 */
     flex: 70%;
     background-color: white;
     padding: 20px;
@@ -129,13 +134,13 @@ body {
 .goods-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .item {
     margin-top: 5px;
     display: flex;
-    align-items:flex-start;
+    align-items: flex-start;
     text-align: center;
     width: 277px;
     /* height: 380px; */
@@ -145,6 +150,7 @@ body {
     box-sizing: border-box;
     border: 1px solid rgb(206, 205, 205);
     border-radius: 20px;
+    margin-left: 10px;
 }
 
 .img_block {
@@ -168,7 +174,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     align-self: center;
-    color: #aaa;   
+    color: #aaa;
 }
 
 .title_for_item {
@@ -252,7 +258,7 @@ body {
 
 /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 700px) {
-    .row {   
+    .row {
         flex-direction: column;
     }
 }
