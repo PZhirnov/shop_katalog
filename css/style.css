@@ -56,6 +56,26 @@ body {
 
 } */
 
+.search {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+}
+
+.goods-search {
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.search-button {
+    margin-left: 15px;
+    align-self: center;
+}
+
+
+
 .basket {
     display: flex;
     align-items: center;
@@ -67,11 +87,12 @@ body {
 .btn {
     padding: 5px 20px;
     border-radius: 5px;
+    box-sizing: border-box;
     border: none;
     background-color: rgb(255, 242, 0);
     font-family: sans-serif;
     font-weight: bold;
-    height: 25px;
+    /* height: 25px; */
 }
 
 
