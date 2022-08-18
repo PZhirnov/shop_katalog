@@ -16,7 +16,6 @@ const service = (url) => fetch(url).then((response) => {
     if (!response.ok) {
         throw new Error('Ошибка получения данных');
     }
-    debugger
     return response.json();
 }).catch((err) => {
     console.log(err);
@@ -57,7 +56,6 @@ class GoodsList {
 
     }
 
-    // --- Решение по условию ДЗ №3 - 
     fetchGoods() {
         return new Promise((resolve) => {
             service(`${BASE}${GOODS}`).then((data) => {
