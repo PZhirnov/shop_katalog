@@ -57,25 +57,27 @@ class GoodsItem {
 class GoodsList {
     constructor() {
         this.goods = [];
+        this.filteredGoods = [];
 
     }
 
     // --- Решение по условию ДЗ №3 - 
     fetchGoods() {
         return new Promise((resolve) => {
-            const p = service(`${BASE}${GOODS}`);
-            p.then((data) => {
+            service(`${BASE}${GOODS}`).then((data) => {
                 this.goods = data;
+                this.filteredGoods = data;
                 resolve();
-            }, (error) => { alert(error); })
+            }, (error) => {
+                alert(error);
+            })
         });
     }
 
     // --- Решение по условию ДЗ № 1 ------
     // fetchGoods(callback) {
     //     // --- К решению ДЗ №1 ---- 
-    //     let p = service(`${BASE}${GOODS}`)
-    //     p.then((data) => {
+    //     service(`${BASE}${GOODS}`).then((data) => {
     //         this.goods = data;
     //         callback();
     //     }, (error) => {
@@ -85,7 +87,9 @@ class GoodsList {
 
     filterGoods(value) {
         // Фильтруем список товаров по данным из поля
-        alert(value);
+        const regexp = new RegExp(value, 'i');
+        this.filteredGoods = this.goods.filter(good => regexp.test(good.title));
+        this.render();
     }
 
 
@@ -100,7 +104,7 @@ class GoodsList {
     }
 
     render() {
-        const items = this.goods.map(good => {
+        const items = this.filteredGoods.map(good => {
             const goodItem = new GoodsItem(good);
             return goodItem.render();
         }).join('')

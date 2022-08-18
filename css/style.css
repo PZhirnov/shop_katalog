@@ -1,17 +1,20 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 /* Style the body */
 body {
     font-family: Roboto, sans-serif;
     /* font-stretch: semi-condensed; */
-    margin: 0;
+    /* margin: 0; */
 }
 
 /* Header/logo Title */
 .header {
     padding: 30px;
+    box-sizing: border-box;
     text-align: center;
     background: #424242;
     color: white;
@@ -42,6 +45,12 @@ body {
     padding: 14px 20px;
     text-decoration: none;
     font-weight: bold;
+}
+
+a.current {
+    color: black;
+    background-color: rgb(255, 242, 0);
+
 }
 
 /* Right-aligned link */
@@ -134,6 +143,7 @@ body {
 
 /* Main column */
 .main {
+    
     -ms-flex: 70%;
     /* IE10 */
     flex: 70%;
@@ -290,4 +300,50 @@ body {
         float: none;
         width: 100%;
     }
+}
+
+/* Страница Контакты */
+.contact {
+    max-width: 650px;
+    margin: 15px auto;
+    padding: 25px;
+    font-size: large;
+    border-radius: 20px;
+    border: 1px solid rgb(212, 212, 212);
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+}
+
+.form-contact {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.input_row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.field_in_form {
+    font-size: large;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 350px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.btns_form {
+    display: flex;
+    justify-content: center;
+}
+
+.btn.form_btn {
+    margin: 15px;
+    width: 50%;
+
+    padding: 15px;
 }
