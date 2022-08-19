@@ -143,7 +143,7 @@ a.current {
 
 /* Main column */
 .main {
-    
+
     -ms-flex: 70%;
     /* IE10 */
     flex: 70%;
@@ -327,14 +327,36 @@ a.current {
     justify-content: space-between;
 }
 
+
+
 .field_in_form {
     font-size: large;
     box-sizing: border-box;
     padding: 5px;
     width: 350px;
     border-radius: 5px;
-    border: 1px solid black;
+    border: 1px solid;
 }
+
+.field_text_in_form {
+    font-size: x-large;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 350px;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+
+.err {
+    font-size: small;
+    color: red;
+    display: none;
+    position: relative;
+    left: 20px;
+}
+
+
 
 .btns_form {
     display: flex;
