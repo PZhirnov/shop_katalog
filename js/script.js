@@ -5,26 +5,21 @@ const BASE = 'https://run.mocky.io/v3';
 const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
 
 
-// ---- РЕШЕНИЕ ДЗ №1. Переделать service так, чтобы функция использовала промисы
+// ---- Service переделан на fetch
 
-function service(url) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url);
-        const loadHandler = () => {
-            console.log(xhr.status);
-            // расскомментировать для проверки ассинхронности
-            // setTimeout(() => resolve(JSON.parse(xhr.response)), 5000);
-            resolve(JSON.parse(xhr.response));
-        }
-        xhr.onload = loadHandler;
-        // добавил обработчик ошибки
-        xhr.onerror = function () {
-            reject(new Error('Ошибка получения данных! Обновите страницу.'));
-        };
-        xhr.send();
-    })
-}
+// Пример короткой записи
+// const service = (url) => fetch(url).then((response) => response.json());
+
+
+const service = (url) => fetch(url).then((response) => {
+    // Добавил проверку на успешность запроса (с cors не работает)
+    if (!response.ok) {
+        throw new Error('Ошибка получения данных');
+    }
+    return response.json();
+}).catch((err) => {
+    console.log(err);
+});
 
 
 // Класс, реализующий ренедринг товара карточки товара
@@ -57,32 +52,29 @@ class GoodsItem {
 class GoodsList {
     constructor() {
         this.goods = [];
+        this.filteredGoods = [];
 
     }
 
-    // --- Решение по условию ДЗ №3 - 
     fetchGoods() {
         return new Promise((resolve) => {
-            const p = service(`${BASE}${GOODS}`);
-            p.then((data) => {
+            service(`${BASE}${GOODS}`).then((data) => {
                 this.goods = data;
+                this.filteredGoods = data;
                 resolve();
-            }, (error) => { alert(error); })
+            }, (error) => {
+                alert(error);
+            })
         });
     }
 
-    // --- Решение по условию ДЗ № 1 ------
-    // fetchGoods(callback) {
-    //     // --- К решению ДЗ №1 ---- 
-    //     let p = service(`${BASE}${GOODS}`)
-    //     p.then((data) => {
-    //         this.goods = data;
-    //         callback();
-    //     }, (error) => {
-    //         alert(error); // сообщение об ошибке, если нужно
-    //     })
-    // }
 
+    filterGoods(value) {
+        // Фильтруем список товаров по данным из поля
+        const regexp = new RegExp(value, 'i');
+        this.filteredGoods = this.goods.filter(good => regexp.test(good.title));
+        this.render();
+    }
 
 
     // метод определяет общую стоимость товаров в каталоге
@@ -96,7 +88,7 @@ class GoodsList {
     }
 
     render() {
-        const items = this.goods.map(good => {
+        const items = this.filteredGoods.map(good => {
             const goodItem = new GoodsItem(good);
             return goodItem.render();
         }).join('')
@@ -108,19 +100,19 @@ class GoodsList {
 // Выводим данные на страницу
 const goodsList = new GoodsList();
 
-// --- К решению ДЗ №1
-// goodsList.fetchGoods(() => {
-//     goodsList.render();
-// });
-
-
-// --- К решению ДЗ №3
 goodsList.fetchGoods().then(() => {
     goodsList.render();
 })
 
 
-//console.log('текст для проверки ассинхронности')
-
 // Вывод суммы по всем товарам каталога
 // alert(`Общая стоимость всех товаров в каталоге составляет: ${list.calculateСostGoods()}`);
+
+// --- ДЗ №4
+const searchButton = document.querySelector('.search-button');
+const searchField = document.querySelector('.goods-search');
+searchButton.addEventListener('click', () => {
+    if (searchField.value != null) {
+        goodsList.filterGoods(searchField.value);
+    }
+});
