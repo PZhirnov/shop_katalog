@@ -120,6 +120,13 @@ a.current {
     color: black;
 }
 
+.btn.close {
+    width: 50px;
+    height: 50px;
+    justify-self: flex-end;
+}
+
+
 /* Column container */
 .row {
     display: -ms-flexbox;
@@ -258,6 +265,42 @@ a.current {
     width: 100%;
 }
 
+/* КОРЗИНА */
+.basket_block {
+    /* display: flex; */
+    width: 100%;
+    height: 100vh;
+    /* border: 1px solid rgb(204, 204, 204); */
+    /* margin: 10px; */
+    /* padding: 20px; */
+    box-sizing: border-box;
+    /* background-color: rgb(248, 248, 248); */
+}
+
+.myitems {
+    margin: 0 auto;
+    border: 1px solid rgb(206, 205, 205);
+    margin-top: 5px;
+    border-radius: 20px;
+    /* width: 100%;*/
+    height: 100%;
+    display: flex;
+    /* display: flex;
+    align-items: flex-start;
+    text-align: center;
+    width: 277px;
+    /* height: 380px; */
+    /* background-color: rgb(255, 255, 255);
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid rgb(206, 205, 205);
+    border-radius: 20px;
+    margin-left: 10px; */
+}
+
+
+
 /* Footer */
 .footer {
     display: flex;
@@ -368,4 +411,59 @@ a.current {
     width: 50%;
 
     padding: 15px;
+}
+
+
+/* Spinner */
+
+.spinner_block {
+    height: 30vh;
+    padding: 10%;
+}
+
+/* элементы спиннера также выравниваем по центру */
+.spinner {
+    /* display: flex; */
+    margin: auto auto;
+    text-align: center;
+    /* height: 30%; */
+    /* width: 100%; */
+    /* align-content: center; */
+    /* align-items: center; */
+}
+
+
+/*  элемент спиннера - делаем круг из квадрата 40x40
+    с помощью свойства border-radius, левая граница круга окрашена
+    в другой цвет. далее запускаем бесконечную анимацию
+*/
+.spinner__animation {
+    display: inline-block;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-top: 3px solid rgba(0, 0, 0, 0.1);
+    border-right: 3px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    border-left: 3px solid rgb(129, 138, 145);
+    animation: loading-spinner 0.5s infinite linear;
+}
+
+/* это текст для спиннера, например - "Загрузка..." */
+.spinner__info {
+    display: block;
+    padding-top: 5px;
+    color: rgb(129, 138, 145);
+    font-size: .9rem;
+}
+
+/* сама анимация вращения */
+@keyframes loading-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
