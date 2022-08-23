@@ -27,7 +27,7 @@
             <a href="#">Доставка</a>
             <a href="contacts.html">Контакты</a>
             <div class="search">
-                <input type="text" class="goods-search">
+                <input type="text" class="goods-search" v-model="searchField">
                 <button class="search-button btn" type="button">Искать</button>
             </div>
             <!-- <a href="#" class="right">Корзина</a> -->
@@ -48,11 +48,12 @@
                     ipsam quia.</p>
                 <h3>Lorem, ipsum.</h3>
                 <p>Lorem ipsum dolor sit ame.</p>
-                <div class="fakeimg">Блок с рекламой</div><br>
-                <div class="fakeimg">Блок с рекламой</div><br>
-                <div class="fakeimg">Блок с рекламой</div>
+                <!-- Тут временный привер вывода блоков с рекламой на сайт -->
+                <div class="fakeimg" v-for="adv in ['Хорошая новость', 'Выгодный комплект']">{{ adv }}</div><br>
             </div>
             <div class="main">
+                <h1 class="test">Значение в поле поиска: {{ searchField }}</h1>
+                <h1 class="test">Итого по всем товарам в каталоге: {{ totalPriceItems }}</h1>
                 <!-- Товары в каталоге -->
                 <div class="catalog" v-if="!showBasket">
                     <h2>Каталог товаров:</h2>
@@ -65,7 +66,7 @@
                             <span class="category_name">{{ item.category }}</span>
                             <a href="#" class="title_for_item" v-bind:id="item.id">{{ item.title }}</a>
                             <span class="price_item">{{ formatPrice(item.price) }} {{ item.currency }}</span>
-                            <button class="btn btn_item" id=${this.id}>В корзину</button>
+                            <button class="btn btn_item" v-bind:id="item.id">В корзину</button>
                         </div>`;
                     </div>
                     <div class="spinner_block" v-else>
@@ -76,9 +77,41 @@
                     </div>
                 </div>
                 <div class="basket_block" v-else>
-                    <h2>Корзина:</h2>
-                    <div class="myitems">
-                        <button class="btn close" @click="showBasket=!showBasket">Х</button>
+                    <h2 v-if="itemsInBasket.length">Добавлено в корзину:</h2>
+                    <h2 v-else>Корзина пуста!</h2>
+
+                    <button class="btn test" @click="testBasket">Добавить в корзину
+                        товары для теста</button>
+
+                    <div class="myitems" v-if="itemsInBasket.length">
+                        <div class="topBtn">
+                            <button class="btn close" @click="showBasket=!showBasket">Х</button>
+                        </div>
+                        <!-- Товары в корзине -->
+                        <div class="item_row" v-for="item in itemsInBasket">
+                            <div class="td_image">
+                                <img v-bind:src="imgUrl(item.img)" alt="item.title">
+                            </div>
+                            <div class="td_description justify">
+                                <p>{{ item.title }}</p>
+                            </div>
+                            <div class="td_price justify">
+                                <p>{{ formatPrice(item.price) }} {{ item.currency }}</p>
+                            </div>
+                            <div class="td_count justify">
+                                <input type="number" name="" id="" value="1" v-model="item.count">
+                            </div>
+                            <div class="td_total justify">
+                                <span>{{ formatPrice(totalForItem(item)) }} {{ item.currency }}</span>
+
+                            </div>
+                            <div class="td_delete justify">
+                                <button class="btn">удалить</button>
+                            </div>
+                        </div>
+                        <h1>Итоговая стоимость товаров в корзине: {{ formatPrice(totalInBasket) }} руб.</h1>
+
+
 
                     </div>
 
@@ -87,20 +120,6 @@
                 <!-- Блог магазина (для визуальной наглядности страницы) -->
                 <div class="blog" v-if="!showBasket">
                     <h2>Блог магазина:</h2>
-                    <!-- <img src="img/scale_1200.webp" alt=""> -->
-                    <h1>Квантовый компьютер D-Wave 2000Q за 15 млн. долларов</h1>
-                    <h5>Pavel Zhirnov, 04.08.2022</h5>
-                    <p>Канадская компания D-Wave считается одним из первопроходцев в области производства коммерчески
-                        доступных квантовых компьютеров. Выпуск первых моделей состоялся ещё в 2007 году.
-                        Сравнить производительность квантового компьютера с работой традиционного – дело непростое.
-                        Причем в
-                        отличие от традиционных процессоров, ЦПУ и ГПУ, удвоение кубитов сопровождается не 2-кратным, а
-                        1000-кратным ростом производительности. По сравнению с компьютером, имеющим традиционную
-                        архитектуру
-                        и конфигурацию в виде одноядерного ЦПУ и 2500-ядерного ГПУ, разница в быстродействии составляет
-                        от
-                        1,000 до 10,000 раз, но есть несколько «но».
-                    </p>
                     <a href="#" class="">Читать далее</a>
                 </div>
 
