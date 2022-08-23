@@ -27,12 +27,12 @@
             <a href="#">Доставка</a>
             <a href="contacts.html">Контакты</a>
             <div class="search">
-                <input type="text" class="goods-search" v-model="searchField">
+                <input type="text" class="goods-search" v-model="searchLine">
                 <button class="search-button btn" type="button">Искать</button>
             </div>
             <!-- <a href="#" class="right">Корзина</a> -->
             <div class="basket">
-                <button class="btn right" @click="showBasket=!showBasket">Корзина (0 товаров)</button>
+                <button class="btn right" @click="isVisibleCart=!isVisibleCart">Корзина (0 товаров)</button>
             </div>
         </div>
 
@@ -52,11 +52,14 @@
                 <div class="fakeimg" v-for="adv in ['Хорошая новость', 'Выгодный комплект']">{{ adv }}</div><br>
             </div>
             <div class="main">
-                <h1 class="test">Значение в поле поиска: {{ searchField }}</h1>
+                <h1 class="test">Значение в поле поиска: {{ searchLine }}</h1>
                 <h1 class="test">Итого по всем товарам в каталоге: {{ totalPriceItems }}</h1>
                 <!-- Товары в каталоге -->
-                <div class="catalog" v-if="!showBasket">
+                <div class="catalog" v-if="isVisibleCart">
                     <h2>Каталог товаров:</h2>
+                    <div class="response_error" v-if="!dataState">
+                        <h1>Данные не были получены!</h1>
+                    </div>
                     <div class="goods-list" v-if="dataState">
                         <!-- В данный тег выводим карточки товаров -->
                         <div class="item" v-for="item in items">
@@ -85,7 +88,7 @@
 
                     <div class="myitems" v-if="itemsInBasket.length">
                         <div class="topBtn">
-                            <button class="btn close" @click="showBasket=!showBasket">Х</button>
+                            <button class="btn close" @click="isVisibleCart=!isVisibleCart">Х</button>
                         </div>
                         <!-- Товары в корзине -->
                         <div class="item_row" v-for="item in itemsInBasket">

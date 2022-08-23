@@ -11,8 +11,8 @@ const app = new Vue({
     data: {
         items: [],
         dataState: false,
-        showBasket: false,
-        searchField: '',
+        isVisibleCart: true,
+        searchLine: '',
         itemsInBasket: [],
     },
 
@@ -74,7 +74,8 @@ const app = new Vue({
                 .then((data) => {
                     this.items = data;
                     this.dataState = true;
-                    // тестовые данные для корзины
+
+                    // --- добавим тестовые данные для корзины
                     this.testBasket();
                 });
         }, 0);
