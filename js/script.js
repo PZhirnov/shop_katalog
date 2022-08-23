@@ -11,6 +11,7 @@ const app = new Vue({
     data: {
         items: [],
         dataState: false,
+        errData: false,
         isVisibleCart: true,
         searchLine: '',
         itemsInBasket: [],
@@ -76,17 +77,20 @@ const app = new Vue({
         // Получаем данные по основным товарам в каталоге
         // Сделаем задержку для вывода сообщения
         setTimeout(() => {
-            fetch(url).then((response) => response.json())
-                .then((data) => {
-                    this.items = data;
-                    this.dataState = true;
-
-                    // --- добавим тестовые данные для корзины
-                    this.testBasket();
-                });
+            fetch(url).then((response) => {
+                if (response.ok) {
+                    this.errData = false
+                    return response.json()
+                } else {
+                    this.errData = true
+                };
+            }).then((data) => {
+                this.items = data;
+                this.dataState = true;
+                // --- добавим тестовые данные для корзины
+                this.testBasket();
+            });
         }, 2000);
-
-
     },
 
 })

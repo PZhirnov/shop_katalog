@@ -56,7 +56,7 @@
                 <!-- Товары в каталоге -->
                 <div class="catalog" v-if="isVisibleCart">
                     <h2>Каталог товаров:</h2>
-                    <div class="response_error" v-if="!dataState">
+                    <div class="response_error" v-if="errData">
                         <h1>Данные не были получены!</h1>
                     </div>
                     <div class="goods-list" v-if="dataState">
