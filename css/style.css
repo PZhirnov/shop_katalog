@@ -120,6 +120,14 @@ a.current {
     color: black;
 }
 
+.btn.close {
+    width: 50px;
+    height: 50px;
+    border-radius: 20px;
+
+}
+
+
 /* Column container */
 .row {
     display: -ms-flexbox;
@@ -258,6 +266,76 @@ a.current {
     width: 100%;
 }
 
+/* КОРЗИНА */
+.basket_block {
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.myitems {
+    margin: 0 auto;
+    border: 1px solid rgb(206, 205, 205);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.topBtn {
+    text-align: end;
+    width: 100%;
+    margin: 5px;
+}
+
+.item_row {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    box-sizing: border-box;
+    height: 200px;
+    border: 1px solid rgb(255, 252, 252);
+    justify-content: space-between;
+
+}
+
+.item_row .td_image {
+    height: 200px;
+    width: 200px;
+}
+
+.td_image img {
+    height: inherit;
+}
+
+.justify {
+    align-self: center;
+    margin-left: 10px;
+}
+
+.td_description {
+    width: 35%;
+}
+
+.td_count {
+    width: 60px;
+    margin-left: 15px;
+}
+
+.td_count input {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.td_total {
+    width: 80px;
+}
+
+
+
 /* Footer */
 .footer {
     display: flex;
@@ -368,4 +446,71 @@ a.current {
     width: 50%;
 
     padding: 15px;
+}
+
+
+/* Spinner */
+
+.spinner_block {
+    height: 30vh;
+    padding: 10%;
+}
+
+/* элементы спиннера также выравниваем по центру */
+.spinner {
+    /* display: flex; */
+    margin: auto auto;
+    text-align: center;
+    /* height: 30%; */
+    /* width: 100%; */
+    /* align-content: center; */
+    /* align-items: center; */
+}
+
+
+/*  элемент спиннера - делаем круг из квадрата 40x40
+    с помощью свойства border-radius, левая граница круга окрашена
+    в другой цвет. далее запускаем бесконечную анимацию
+*/
+.spinner__animation {
+    display: inline-block;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-top: 3px solid rgba(0, 0, 0, 0.1);
+    border-right: 3px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid rgba(0, 0, 0, 0.1);
+    border-left: 3px solid rgb(129, 138, 145);
+    animation: loading-spinner 0.5s infinite linear;
+}
+
+/* это текст для спиннера, например - "Загрузка..." */
+.spinner__info {
+    display: block;
+    padding-top: 5px;
+    color: rgb(129, 138, 145);
+    font-size: .9rem;
+}
+
+/* сама анимация вращения */
+@keyframes loading-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* стили для тестовых полей - вывода тестовых данных  */
+
+.test {
+    border: 1px solid red;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    background-color: red;
+
 }
