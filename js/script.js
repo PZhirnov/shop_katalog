@@ -34,6 +34,12 @@ const app = new Vue({
     },
 
     methods: {
+
+        // Обработчик клика на кнопке "Искать"
+        filterGoods() {
+            alert('Добавить поиск');
+        },
+
         // Полный url для изображения
         imgUrl(file_name) {
             return file_name ? `img/${file_name}` : `img/default.jpg`;

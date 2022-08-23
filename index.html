@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Магазин электроники</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/spinner.scss">
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="js/script.js" defer></script>
 </head>
@@ -28,7 +27,7 @@
             <a href="contacts.html">Контакты</a>
             <div class="search">
                 <input type="text" class="goods-search" v-model="searchLine">
-                <button class="search-button btn" type="button">Искать</button>
+                <button class="search-button btn" type="button" @click="filterGoods">Искать</button>
             </div>
             <!-- <a href="#" class="right">Корзина</a> -->
             <div class="basket">
@@ -121,7 +120,7 @@
                 </div>
 
                 <!-- Блог магазина (для визуальной наглядности страницы) -->
-                <div class="blog" v-if="!showBasket">
+                <div class="blog" v-if="">
                     <h2>Блог магазина:</h2>
                     <a href="#" class="">Читать далее</a>
                 </div>
