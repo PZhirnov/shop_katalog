@@ -12,7 +12,6 @@
 </head>
 
 <body>
-
     <div id="app">
         <div class="header">
             <h1>Магазин электроники</h1>
@@ -20,111 +19,53 @@
         </div>
 
         <div class="navbar">
+            <links-in-menu></links-in-menu>
 
-            <a href="#">Главная</a>
-            <a href="#" class="current">Каталог</a>
-            <a href="#">Доставка</a>
-            <a href="contacts.html">Контакты</a>
+            <!-- Поле поиска -->
             <div class="search">
                 <input type="text" class="goods-search" v-model="searchLine">
-                <button class="search-button btn" type="button" @click="filterGoods">Искать</button>
+                <btn-component add_class="search-button" @click_handler="filterItems">
+                    Искать
+                </btn-component>
             </div>
-            <!-- <a href="#" class="right">Корзина</a> -->
-            <div class="basket">
-                <button class="btn right" @click="isVisibleCart=!isVisibleCart">Корзина (0 товаров)</button>
+            <div class="basket"> 
+                <btn-component add_class="right" @click_handler="isVisibleCart=!isVisibleCart">
+                    Корзина ({{ formatPrice(totalInBasket) }} руб.)
+                </btn-component>
             </div>
         </div>
 
         <div class="row">
+            <!-- Левая панель -реклама -->
             <div class="side">
-                <h2>Действующие акции:</h2>
-                <h4>Купи 3 товара и получи подарок!</h4>
-                <div class="action">
-                    <img src="img/akczii-i-podarki.jpg" alt="">
-                </div>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur ratione quidem officiis,
-                    placeat
-                    ipsam quia.</p>
-                <h3>Lorem, ipsum.</h3>
-                <p>Lorem ipsum dolor sit ame.</p>
-                <!-- Тут временный привер вывода блоков с рекламой на сайт -->
-                <div class="fakeimg" v-for="adv in ['Хорошая новость', 'Выгодный комплект']">{{ adv }}</div><br>
+                <advertisement></advertisement>
             </div>
+            
+            <!-- Основная область -->
             <div class="main">
-                <h1 class="test">Значение в поле поиска: {{ searchLine }}</h1>
-                <h1 class="test">Итого по всем товарам в каталоге: {{ totalPriceItems }}</h1>
-                <!-- Товары в каталоге -->
-                <div class="catalog" v-if="isVisibleCart">
+
+                <spinner v-if="!dataState"></spinner>
+                
+                <!-- ТОВАРЫ В КАТАЛОГЕ -->
+                <div class="catalog">
                     <h2>Каталог товаров:</h2>
-                    <div class="response_error" v-if="errData">
-                        <h1>Данные не были получены!</h1>
+                    <div class="filter_sample" >
+                        <span>Динамическая фильтрация данных каталога:</span> 
+                        <dynamic-search :search_value="searchLine" @update:search_value="filterItemsDyn($event)"></dynamic-search>   
                     </div>
-                    <div class="goods-list" v-if="dataState">
-                        <!-- В данный тег выводим карточки товаров -->
-                        <div class="item" v-for="item in items">
-                            <div class="img_block">
-                                <img v-bind:src="imgUrl(item.img)" v-bind:alt="item.title">
-                            </div>
-                            <span class="category_name">{{ item.category }}</span>
-                            <a href="#" class="title_for_item" v-bind:id="item.id">{{ item.title }}</a>
-                            <span class="price_item">{{ formatPrice(item.price) }} {{ item.currency }}</span>
-                            <button class="btn btn_item" v-bind:id="item.id">В корзину</button>
-                        </div>`;
-                    </div>
-                    <div class="spinner_block" v-else>
-                        <div class="spinner">
-                            <span class="spinner__animation"></span>
-                            <span class="spinner__info">Загрузка...</span>
-                        </div>
-                    </div>
+                    
+                    <err-get-data v-bind:err_data="errData"></err-get-data>
+                    <!-- New goods list -->
+                    <products-list v-bind:filtered_items="filteredItems" v-bind:data_state="dataState"></products-list>  
+                    <h1 class="test">ТЕСТ - Итого по показанным товарам в каталоге: {{ formatPrice(totalPriceItems) }}</h1>
                 </div>
-                <div class="basket_block" v-else>
-                    <h2 v-if="itemsInBasket.length">Добавлено в корзину:</h2>
-                    <h2 v-else>Корзина пуста!</h2>
+            
+                <!-- КОРЗИНА -->
+                <basket v-bind:items_in_basket="itemsInBasket" v-bind:total_in_basket="formatPrice(totalInBasket)" 
+                    v-if="!isVisibleCart" @close_btn="isVisibleCart=!isVisibleCart"></basket>
 
-                    <button class="btn test" @click="testBasket">Добавить в корзину
-                        товары для теста</button>
-
-                    <div class="myitems" v-if="itemsInBasket.length">
-                        <div class="topBtn">
-                            <button class="btn close" @click="isVisibleCart=!isVisibleCart">Х</button>
-                        </div>
-                        <!-- Товары в корзине -->
-                        <div class="item_row" v-for="item in itemsInBasket">
-                            <div class="td_image">
-                                <img v-bind:src="imgUrl(item.img)" alt="item.title">
-                            </div>
-                            <div class="td_description justify">
-                                <p>{{ item.title }}</p>
-                            </div>
-                            <div class="td_price justify">
-                                <p>{{ formatPrice(item.price) }} {{ item.currency }}</p>
-                            </div>
-                            <div class="td_count justify">
-                                <input type="number" name="" id="" value="1" v-model="item.count">
-                            </div>
-                            <div class="td_total justify">
-                                <span>{{ formatPrice(totalForItem(item)) }} {{ item.currency }}</span>
-
-                            </div>
-                            <div class="td_delete justify">
-                                <button class="btn">удалить</button>
-                            </div>
-                        </div>
-                        <h1>Итоговая стоимость товаров в корзине: {{ formatPrice(totalInBasket) }} руб.</h1>
-
-
-
-                    </div>
-
-                </div>
-
-                <!-- Блог магазина (для визуальной наглядности страницы) -->
-                <div class="blog" v-if="">
-                    <h2>Блог магазина:</h2>
-                    <a href="#" class="">Читать далее</a>
-                </div>
-
+                <!-- БЛОГ МАГАЗИНА (для визуальной наглядности страницы) -->
+                <our-blog></our-blog>
             </div>
         </div>
         <div class="footer">
