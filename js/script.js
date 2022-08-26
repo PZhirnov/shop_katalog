@@ -10,6 +10,7 @@ const app = new Vue({
 
     data: {
         items: [],
+        filteredItems: [],
         dataState: false,
         errData: false,
         isVisibleCart: true,
@@ -36,9 +37,31 @@ const app = new Vue({
 
     methods: {
 
+        // Загрузка данных с сервера
+        fetchItems() {
+            setTimeout(() => {
+                fetch(url).then((response) => {
+                    if (response.ok) {
+                        this.errData = false
+                        return response.json()
+                    } else {
+                        this.errData = true
+                    };
+                }).then((data) => {
+                    this.items = data;
+                    this.filteredItems= data;
+                    this.dataState = true;
+                    // --- добавим тестовые данные для корзины
+                    this.testBasket();
+                });
+            }, 0);
+        },
+
         // Обработчик клика на кнопке "Искать"
-        filterGoods() {
-            alert('Добавить поиск');
+        filterItems() {
+            this.filteredItems = this.items.filter(({ title })=>{
+                return title ? title.match(new RegExp(this.searchLine, 'gui')): false;
+            });
         },
 
         // Полный url для изображения
@@ -75,22 +98,7 @@ const app = new Vue({
 
     mounted() {
         // Получаем данные по основным товарам в каталоге
-        // Сделаем задержку для вывода сообщения
-        setTimeout(() => {
-            fetch(url).then((response) => {
-                if (response.ok) {
-                    this.errData = false
-                    return response.json()
-                } else {
-                    this.errData = true
-                };
-            }).then((data) => {
-                this.items = data;
-                this.dataState = true;
-                // --- добавим тестовые данные для корзины
-                this.testBasket();
-            });
-        }, 2000);
+        this.fetchItems();
     },
 
 })

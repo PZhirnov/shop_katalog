@@ -27,7 +27,7 @@
             <a href="contacts.html">Контакты</a>
             <div class="search">
                 <input type="text" class="goods-search" v-model="searchLine">
-                <button class="search-button btn" type="button" @click="filterGoods">Искать</button>
+                <button class="search-button btn" type="button" @click="filterItems">Искать</button>
             </div>
             <!-- <a href="#" class="right">Корзина</a> -->
             <div class="basket">
@@ -61,7 +61,7 @@
                     </div>
                     <div class="goods-list" v-if="dataState">
                         <!-- В данный тег выводим карточки товаров -->
-                        <div class="item" v-for="item in items">
+                        <div class="item" v-for="item in filteredItems">
                             <div class="img_block">
                                 <img v-bind:src="imgUrl(item.img)" v-bind:alt="item.title">
                             </div>
@@ -69,7 +69,7 @@
                             <a href="#" class="title_for_item" v-bind:id="item.id">{{ item.title }}</a>
                             <span class="price_item">{{ formatPrice(item.price) }} {{ item.currency }}</span>
                             <button class="btn btn_item" v-bind:id="item.id">В корзину</button>
-                        </div>`;
+                        </div>
                     </div>
                     <div class="spinner_block" v-else>
                         <div class="spinner">
