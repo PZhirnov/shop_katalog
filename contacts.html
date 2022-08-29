@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин электроники</title>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <div class="header">
+        <h1>Магазин электроники</h1>
+        <p>Мой проект на курсе "Продвинутый JavaScript"</p>
+    </div>
+
+    <div class="navbar">
+
+        <a href="#">Главная</a>
+        <a href="index.html">Каталог</a>
+        <a href="#">Доставка</a>
+        <a href="#" class="current">Контакты</a>
+
+        <!-- <a href="#" class="right">Корзина</a> -->
+        <div class="basket">
+            <button class="btn right">Корзина (0 товаров)</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="main">
+            <!-- Товары в каталоге -->
+            <div class="contact">
+                <h1>Введите ваши контакты:</h1>
+                <form id="formContact">
+                    <div>
+                        <label for="name" class="input_row">Имя:
+                            <input type="text" class="field_in_form" name='name' placeholder="Введите имя">
+                        </label>
+                        <span class="err err_name">Имя может состоять только из символов!</span>
+                    </div>
+                    <div>
+                        <label for="email" class="input_row"> Эл. почта:
+                            <input type="text" class="field_in_form" name='email' placeholder="email">
+                        </label>
+                        <span class="err err_email">Адрес почтового ящика содержит ошибку!</span>
+                    </div>
+                    <div>
+                        <label for="number" class="input_row">Номер для связи:
+                            <input type="text" class="field_in_form" name='number' placeholder="Контактный номер">
+                        </label>
+                        <span class="err err_number">Формат номер должен быть вида +7(000)000-0000</span>
+                    </div>
+                    <div>
+                        <label for="" class="input_row">Ваше сообщение:
+                            <textarea name="text" id="" cols="10" rows="5" class="field_text_in_form"
+                                placeholder="Ваше сообщение"></textarea>
+                        </label>
+                    </div>
+                    <div class="btns_form">
+                        <button type="submit" class="btn form_btn">Отправить</button>
+                        <button type="reset" class="btn form_btn">Очистить</button>
+                    </div>
+                </form>
+
+            </div>
+
+
+
+        </div>
+    </div>
+    <div class="footer">
+        <div class="copy">
+            <span>&copy; Все права защищены. </span>
+        </div>
+    </div>
+
+    <script src="js/contact_form.js"></script>
+</body>
+
+</html>
