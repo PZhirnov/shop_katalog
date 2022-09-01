@@ -1,9 +1,14 @@
 "use strict";
 
 // Структура goods сделана в Mocky - https://run.mocky.io/v3/afd8d1e8-5507-4c20-a26e-7cc09030f768
-const BASE = 'https://run.mocky.io/v3';
-const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
-const url = `${BASE}${GOODS}`
+// const BASE = 'https://run.mocky.io/v3';
+// const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
+// const url = `${BASE}${GOODS}`
+
+const urlCatalog = 'http://localhost:3000/catalog';
+const urlBasket = 'http://localhost:3000/basket';
+const urlDeleteGood = 'http://localhost:3000/basket/delete/'; // удаление объекта по id
+const urlAddBasket = 'http://localhost:3000/basket/add';  // тут отправляетcя post
 
 // ------ Компоненты
 
@@ -32,8 +37,20 @@ Vue.component('product-card', {
         },
 
         addToBasket(event) {
-            // Добавляем выбранный товар в корзину
+            // Если в корзине был ранее добавлен данные товар, то увеличиваем счетчик на +1
+            const addId = event.target.id;
+            const objInBasket = app.itemsInBasket.find((item) => item.id == addId);
+            let count = 1;
+            if (objInBasket) {
+                count = Number(objInBasket.count) + 1;
+            }
+            app.fetchAddInBasket(event.target.id, count, false);
             console.log(event.target.id);
+        },
+
+        searchInBasket(itemCat) {
+            let obj = app.itemsInBasket.find((item) => itemCat.id == item.id);
+            return obj ? false: true;
         },
     },
 
@@ -45,7 +62,8 @@ Vue.component('product-card', {
             <span class="category_name">{{ item.category }}</span>
             <a href="#" class="title_for_item" v-bind:id="item.id">{{ item.title }}</a>
             <span class="price_item">{{ formatPrice(item.price) }} {{ item.currency }}</span>
-            <button class="btn btn_item" v-bind:id="item.id" @click="addToBasket">В корзину</button>
+            <button v-if="searchInBasket(item)" class="btn btn_item" v-bind:id="item.id" @click="addToBasket">В корзину</button>
+            <button v-else class="btn btn_item in_bsk" v-bind:id="item.id">Уже в корзине</button>
         </div> 
     `,
 });
@@ -57,6 +75,7 @@ Vue.component('basket', {
     props: ['items_in_basket', 'close_btn', 'total_in_basket'],
     template: `
         <div class="wrap">
+        
             <div class="basket_block">
                 <h2 v-if="!items_in_basket.length">Корзина пуста!</h2>
                 <div class="topBtn">
@@ -82,32 +101,35 @@ Vue.component('items-basket', {
         formatPrice(price) {
             return app.formatPrice(price);
         },
-        totalForItem(item) {
-            item.total = item.price * item.count;
-            return item.total
-        },
         
+        totalForItem(item) {
+                item.total = item.data.price * item.count;
+                app.fetchAddInBasket(item.id, item.count, true);
+                return item.total; 
+            },
+            
         // TODO: добавить логику удаления товара
         deleteItem(event) {
             console.log(`Будет удален товар с id ${event.target.id}`);
+            app.fetchDeleteFromBasket(event.target.id);
         },
     },
     template: `
         <div class="item_row">
             <div class="td_image">
-                <img v-bind:src="imgUrl(item.img)" alt="item.title">
+                <img v-bind:src="imgUrl(item.data.img)" alt="item.title">
             </div>
             <div class="td_description justify">
-                <p>{{ item.title }}</p>
+                <p>{{ item.data.title }}</p>
             </div>
             <div class="td_price justify">
-                <p>{{ formatPrice(item.price) }} {{ item.currency }}</p>
+                <p>{{ formatPrice(item.data.price) }} {{ item.data.currency }}</p>
             </div>
             <div class="td_count justify">
                 <input type="number" name="" id="" min=0  v-model="item.count" value = "1">
             </div>
             <div class="td_total justify">
-                <span>{{ formatPrice(totalForItem(item)) }} {{ item.currency }}</span>
+                <span>{{ formatPrice(totalForItem(item)) }} {{ item.data.currency }}</span>
             </div>
             <div class="td_delete justify">
                 <button class="btn" @click="deleteItem" v-bind:id="item.id">удалить</button>
@@ -254,7 +276,7 @@ const app = new Vue({
     },
 
     computed: {
-        // общая стоимость товаров в каталоге
+        // Общая стоимость товаров в каталоге
         totalPriceItems() {
             return this.filteredItems.reduce((prev, { price }) => {
                 let price_valid = price ? parseFloat(price) : 0;
@@ -265,17 +287,16 @@ const app = new Vue({
         // Стоимость товара в корзине с учетом количества
         totalInBasket() {
             return this.itemsInBasket.reduce((prev, item) => {
-                return prev + item.price * item.count;
+                return prev + item.data.price * item.count;
             }, 0)
         },
     },
 
     methods: {
-
-        // Загрузка данных с сервера
+        // Загрузка данных с API
         fetchItems() {
             setTimeout(() => {
-                fetch(url).then((response) => {
+                fetch(urlCatalog).then((response) => {
                     if (response.ok) {
                         this.errData = false;
                         return response.json();
@@ -285,12 +306,76 @@ const app = new Vue({
                 }).then((data) => {
                     this.items = data;
                     this.filteredItems= data;
-                    // --- добавим тестовые данные для корзины
-                    this.testBasket(); // TODO: удалить потом 
-                    this.dataState = true;
-                    
-                });
-            }, 1000);
+                    this.dataState = true;  
+                    });
+            }, 0);
+        },
+
+        fetchBasket() {
+            fetch(urlBasket).then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return {};
+                };
+            }).then((data) => {
+                this.itemsInBasket = data;  
+            })
+        },
+
+        fetchAddInBasket(id_good, count_good, add_count=true) {
+            fetch(urlAddBasket, { 
+                method: "post", 
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                    id: id_good,
+                    count: count_good,
+                    }
+                ),
+            }).then((response) => {
+                if (response.ok) {
+                    if (!add_count) {
+                        let objInBasket = this.itemsInBasket.find((item) => item.id == id_good);
+                        if (objInBasket) {
+                            objInBasket.count += 1;
+                        } else {
+                            let objInCatalog = this.items.find((item) => item.id == id_good)
+                            this.itemsInBasket.push(
+                                {
+                                    id: id_good, 
+                                    count: count_good, 
+                                    data: objInCatalog, 
+                                    total: count_good * objInCatalog.price 
+                                }
+                            )
+                        }
+                    }
+                    return true;
+                } else {
+                    return false;
+                };
+            })
+        },
+
+        fetchDeleteFromBasket(id) {
+            const urlDel =`${urlDeleteGood}${id}`;
+            fetch(urlDel, { 
+                method: "delete", 
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                    }
+                }).then((response) => {
+                    if (response.ok) {
+                        this.fetchBasket();
+                    } else {
+                        alert('Товар не был удален');
+                    }
+            })
         },
 
         // Обработчик клика на кнопке "Искать"
@@ -340,6 +425,7 @@ const app = new Vue({
     mounted() {
         // Получаем данные по основным товарам в каталоге
         this.fetchItems();
+        this.fetchBasket();
     },
 
 })

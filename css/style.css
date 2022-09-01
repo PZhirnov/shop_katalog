@@ -271,6 +271,11 @@ a.current {
     height: auto;
 }
 
+.in_bsk {
+    background-color: azure;
+    border: 1px solid grey;
+}
+
 
 /* Fake image, just for this example */
 .fakeimg {
@@ -304,7 +309,10 @@ a.current {
 .basket_block {
     position: absolute;
     left: 50%;
-    top:20%;
+    top:40%;
+    max-height: 70vh;
+    overflow-x: hidden;
+
     margin: 10% auto;
     display: block;
     width: 800px;
@@ -328,10 +336,14 @@ a.current {
 
 .topBtn {
     display: flex;
+    background-color: white;
     justify-content: space-between;
+    position: sticky;
+    top: 0em;
     /* text-align: end; */
     width: 100%;
-    margin: 5px;
+    margin: 0px;
+    padding: 5px;
 }
 
 .item_row {
