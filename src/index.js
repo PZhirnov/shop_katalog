@@ -1,23 +1,22 @@
 "use strict";
 
-// Структура goods сделана в Mocky - https://run.mocky.io/v3/afd8d1e8-5507-4c20-a26e-7cc09030f768
-// const BASE = 'https://run.mocky.io/v3';
-// const GOODS = '/afd8d1e8-5507-4c20-a26e-7cc09030f768';
-// const url = `${BASE}${GOODS}`
+import './sass/style.scss';
+import Search from './components/Search';
+import Buttons from './components/Buttons';
+import Advert from './components/Advert';
+import Error from './components/Errors';
+// import Additions from './components/Additions';
+import { Menu, Spinner } from './components/Additions';
+import Blog from './components/Blog';
+import { urlCatalog, urlBasket, urlDeleteGood, urlAddBasket } from './constants';
 
-const urlCatalog = 'http://localhost:3000/catalog';
-const urlBasket = 'http://localhost:3000/basket';
-const urlDeleteGood = 'http://localhost:3000/basket/delete/'; // удаление объекта по id
-const urlAddBasket = 'http://localhost:3000/basket/add';  // тут отправляетcя post
-
-// ------ Компоненты
-
+// TODO: Оставил компонент каталога и козины пока тут, т.к. появляется ошибка при разделении. 
+// ------ Компоненты ---- 
 // 1. КАРТОЧКИ ТОВАРОВ В КАТАЛОГЕ (УЧИТЫВАТ ФИЛЬТР)
 
 // Использует вложенный компонент product-card
-Vue.component('products-list', {
+export default Vue.component('products-list', {
     props: ['filtered_items', 'data_state'], 
-    
     template: `
         <div class="goods-list" v-if="data_state">
                 <product-card v-for="item in filtered_items" v-bind:item = "item"></product-card>
@@ -25,15 +24,18 @@ Vue.component('products-list', {
     `,
 });
 
+// Оформление карточки товара
 Vue.component('product-card', {
     props: ['item'],
     methods: {
         imgUrl(file_name) {
-            return app.imgUrl(file_name);
+            return file_name ? `img/${file_name}` : `img/default.jpg`;
         }, 
 
         formatPrice(price) {
-            return app.formatPrice(price);
+            return new Intl.NumberFormat("ru-RU", {
+                minimumFractionDigits: 0
+            }).format(price);
         },
 
         addToBasket(event) {
@@ -67,7 +69,6 @@ Vue.component('product-card', {
         </div> 
     `,
 });
-
 
 
 // 2. КОРЗИНА
@@ -137,128 +138,6 @@ Vue.component('items-basket', {
         </div>
     `
 });
-
-// 3. Динамический поиск товаров в каталоге через компонент
-Vue.component('dynamic-search', {
-    props: ['search_value'],
-    template:`
-        <input v-bind:value="search_value" @input="$emit('update:search_value', $event.target.value)"></input>
-    `
-})
-
-
-// 3. Сообщения об ошибках
-Vue.component('err-get-data', {
-    props: ['err_data'],
-    template: `
-        <div class="response_error" v-if="err_data">
-            <h1>Данные не были получены!</h1>
-        </div>
-    `,
-});
-
-
-// 4. Кнопки
-// Кнопка использует класс btn по умолчанию. В add_class добавляюжтся дополнительные классы.
-Vue.component('btn-component', {
-    props: ['add_class', ],
-    template: `
-        <button v-bind:class="'btn ' + add_class" @click="$emit('click_handler')">
-            <slot></slot>
-        </button>
-    `
-})
-
-// 5. Отображение загрузки
-Vue.component('spinner', {
-    template: `
-        <div class="spinner_block">
-            <div class="spinner">
-                <span class="spinner__animation"></span>
-                <span class="spinner__info">Загрузка...</span>
-            </div>
-        </div>
-        `,
-})
-
-
-// 6. Блок с рекламой
-Vue.component('advertisement', {
-    template: `
-        <div class="side">
-            <h2>Действующие акции:</h2>
-            <h4>Купи 3 товара и получи подарок!</h4>
-            <div class="action">
-                <img src="img/akczii-i-podarki.jpg" alt="">
-            </div>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequatur ratione quidem officiis,
-                placeat
-                ipsam quia.</p>
-            <h3>Lorem, ipsum.</h3>
-            <p>Lorem ipsum dolor sit ame.</p>
-            <!-- Тут временный привер вывода блоков с рекламой на сайт -->
-            <div class="fakeimg" v-for="adv in ['Хорошая новость', 'Выгодный комплект']">{{ adv }}</div><br>
-        </div>
-    `
-})
-
-// 7. Блог магазина
-Vue.component('our-blog', {
-    data () {
-        return {
-            articles: ['Статья 1', 'Статья 2'], 
-        }
-    },
-
-    template: `
-        <div class="blog">
-            <h2>Блог магазина:</h2>
-            <h3 v-for='item in articles'>{{ item }}</h3>
-            <a href="#" class="">Читать далее</a>
-        </div>
-    `
-})
-
-// 8. Основные пункты меню
-Vue.component('links-in-menu', {
-    props: ['links_menu', 'cur_page'],
-    data() {
-        return {
-            linksMenu: [
-                {
-                    href: '#',
-                    title: 'Главная'
-                },
-                {
-                    href: 'index.html',
-                    title: 'Каталог'
-                },
-                {
-                    href: '#',
-                    title: 'Доставка'
-                },
-                {
-                    href: 'contacts.html',
-                    title: 'Контакты'
-                },
-            ],
-        }
-    },
-    
-    methods: {
-        getCurrentPage() {
-           return document.URL.split('/').reverse()[0];
-        },
-    },
-
-    template: `
-        <div>
-            <a v-for="link in linksMenu" v-bind:href="link.href" 
-                v-bind:class="link.href == getCurrentPage() ? 'current': ''" >{{ link.title }}
-            </a>
-        </div>
-    `
-})
 
 
 // ------- ПРИЛОЖЕНИЕ -------

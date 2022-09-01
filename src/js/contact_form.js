@@ -1,3 +1,4 @@
+import '../sass/style.scss'
 
 // Для проверки отправки формы
 const testMocky = 'https://run.mocky.io/v3/2b5bb42c-971b-41e7-8546-962274597e78' // 
