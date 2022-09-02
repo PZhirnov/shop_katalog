@@ -713,3 +713,6 @@ user;/basket/add;200;POST;correct count for id2 (3 -> 4) in basket;Thu Sep 01 20
 user;/basket/add;200;POST;correct count for id2 (4 -> 4) in basket;Thu Sep 01 2022 15:43:53 GMT+0300 (Москва, стандартное время)
 user;/basket/add;200;POST;correct count for id2 (4 -> 5) in basket;Thu Sep 01 2022 15:43:53 GMT+0300 (Москва, стандартное время)
 user;/basket/add;200;POST;correct count for id2 (4 -> 5) in basket;Thu Sep 01 2022 15:43:53 GMT+0300 (Москва, стандартное время)
+user;/basket;200;GET;get basket;Thu Sep 01 2022 17:05:55 GMT+0300 (Москва, стандартное время)
+user;/catalog;304;GET;get catalog data;Thu Sep 01 2022 17:05:55 GMT+0300 (Москва, стандартное время)
+user;/basket/add;200;POST;correct count for id2 (5 -> 5) in basket;Thu Sep 01 2022 17:05:59 GMT+0300 (Москва, стандартное время)

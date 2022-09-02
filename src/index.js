@@ -5,12 +5,13 @@ import Search from './components/Search';
 import Buttons from './components/Buttons';
 import Advert from './components/Advert';
 import Error from './components/Errors';
-// import Additions from './components/Additions';
 import { Menu, Spinner } from './components/Additions';
 import Blog from './components/Blog';
 import { urlCatalog, urlBasket, urlDeleteGood, urlAddBasket } from './constants';
 
-// TODO: Оставил компонент каталога и козины пока тут, т.к. появляется ошибка при разделении. 
+
+
+// TODO: Оставил компонент каталога и козины пока тут, т.к. появляется ошибка при разделении, которую пока не получилось пофиксить. 
 // ------ Компоненты ---- 
 // 1. КАРТОЧКИ ТОВАРОВ В КАТАЛОГЕ (УЧИТЫВАТ ФИЛЬТР)
 
