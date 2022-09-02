@@ -1,5 +1,5 @@
 // 5. Отображение загрузки
-export const Spinner =  Vue.component('spinner', {
+export const Spinner = Vue.component('spinner', {
     template: `
         <div class="spinner_block">
             <div class="spinner">
@@ -35,10 +35,10 @@ export const Menu = Vue.component('links-in-menu', {
             ],
         }
     },
-    
+
     methods: {
         getCurrentPage() {
-           return document.URL.split('/').reverse()[0];
+            return document.URL.split('/').reverse()[0];
         },
     },
 
@@ -50,4 +50,16 @@ export const Menu = Vue.component('links-in-menu', {
         </div>
     `
 })
+
+// Функции для поготовки и проверки данных
+export function fullImgUrl(fileName) {
+    return fileName ? `img/${fileName}` : `img/default.jpg`;
+}
+
+export function getFormatPrice(price) {
+    return new Intl.NumberFormat("ru-RU", {
+        minimumFractionDigits: 0
+    }).format(price);
+}
+
 
